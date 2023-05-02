@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 // 再読込ボタン
 
 export const getStaticProps: GetStaticProps = async () => {
-  const allPostsData = getSortedPostsData();
+  const allPostsData = await getSortedPostsData();
   const paths = getAllPostIds();
   return {
     props: {
@@ -19,10 +19,11 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export default function Home({ allPostsData }: { allPostsData: memoriesCol[] }) {
+  console.log(allPostsData);
   return (
     <main className={`flex min-h-screen flex-col items-center justify-between py-4 ${inter.className}`}>
       {/* https://tailblocks.cc/ */}
-      <section className="text-gray-300 body-font">
+      <section className="text-gray-300 body-font w-full">
         <div className="container px-5 py-24 mx-auto">
           <div className="flex flex-col text-center w-full mb-20">
             <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-100">Our Team</h1>
@@ -33,7 +34,7 @@ export default function Home({ allPostsData }: { allPostsData: memoriesCol[] }) 
           {/* ここループ */}
           <div className="flex flex-wrap -m-2">
             {allPostsData.map((rec) => (
-              <div className="p-2 w-full">
+              <div className="p-2 w-full lg:w-1/4 md:w-1/3 " key={`${rec.author}-${rec.title}`}>
                 <Link href={`memories/${rec.author}-${rec.title}`}>
                   <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
                     <div className="flex-grow">

@@ -1,13 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { DB_INFO } from "../config";
-export type memoriesCol = { _id?: any; author: string; title: string; lylic: string; remarks: string; update: string };
+export type memoriesCol = { _id?: any; author: string; title: string; lyric: string; remarks: string; update: string };
 const kariDatas: [memoriesCol] = [
   {
     _id: "",
     author: "hide",
     title: "frame",
-    lylic: JSON.stringify(`Dear my sun. Should I know how low & low?
+    lyric: JSON.stringify(`Dear my sun. Should I know how low & low?
   Dear my moon. Should I know how low & low?
   Dear my stars　星の嘆き聞けば
   Like a wind　ほんの小さな事だろう
@@ -43,8 +43,9 @@ const kariDatas: [memoriesCol] = [
     update: "2023-04-27T07:11:02.346Z",
   },
 ];
-export function getSortedPostsData() {
-  const allPostsData = kariDatas;
+export async function getSortedPostsData() {
+  const allPostsData = (await getMemories({})) as [memoriesCol];
+  // const allPostsData = kariDatas;
   // Sort posts by date
   return allPostsData.sort((a, b) => {
     if (a.update < b.update) {
@@ -55,32 +56,32 @@ export function getSortedPostsData() {
   });
 }
 const url = DB_INFO.URL;
-const reqApi = (params: any, query = "") => {
-  return fetch(`${url}${query}`, params)
+const reqApi = async (params: any, query = "") => {
+  return await fetch(`${url}${query}`, params)
     .then((res) => res.json())
     .catch((err) => {
       console.log(err);
       console.log("err");
     });
 };
-async function getMemories() {
+async function getMemories(cond: any) {
   let findData = {
     host: DB_INFO.HOST,
     dbName: DB_INFO.DB_NAME,
     coll: "memories",
     method: "find",
-    cond: {},
+    cond,
   };
-  let recs: {rec:[memoriesCol]} = await reqApi({
+  let recs: { rec: [memoriesCol] } = await reqApi({
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(findData),
   });
-  console.log(recs);
+  // console.log(recs);
   return recs.rec;
 }
 export async function getAllPostIds() {
-  let recs: [memoriesCol]  = await getMemories();
+  let recs: [memoriesCol] = await getMemories({});
   // var saveDatas = { ...kariDatas[0] };
   // delete saveDatas._id;
   // let postData = {
@@ -106,17 +107,18 @@ export async function getAllPostIds() {
 }
 export async function getPostData(id: string) {
   // Use gray-matter to parse the post metadata section
-  const matterResult = { data: { date: "", title: "" } };
-  let recs: [memoriesCol]  = await getMemories();
+  let para = id.split("-");
+  console.log('aaaaaaaaaaaaa',para);
+  let recs: [memoriesCol] = await getMemories({ title: para[1], author: para[0] });
   // Use remark to convert markdown into HTML string
   // const processedContent = await remark().use(html).process(matterResult.content);
-  const processedContent = recs[0].lylic;
+  const processedContent = recs[0].lyric;
   var contentHtml = JSON.parse(processedContent) as string;
-  contentHtml = contentHtml.replaceAll("\n","<br>");
+  contentHtml = contentHtml.replaceAll("\n", "<br>");
   // Combine the data with the id and contentHtml
   return {
     id,
     contentHtml,
-    ...(recs[0]),
+    ...recs[0],
   };
 }

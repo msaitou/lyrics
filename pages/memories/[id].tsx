@@ -5,8 +5,8 @@ import utilStyles from "../../styles/utils.module.css";
 import { GetStaticProps, GetStaticPaths } from "next";
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  console.log('id:::',params?.id);
   const postData = await getPostData(params?.id as string);
-  console.log(params?.id);
   return {
     props: {
       postData,
