@@ -1,76 +1,22 @@
-import fs from "fs";
-import path from "path";
-import { DB_INFO } from "../config";
+const { DB_URL, DB_HOST, DB_NAME } = process.env;
+const url = DB_URL;
 export type memoriesCol = { _id?: any; author: string; title: string; lyric: string; remarks: string; update: string };
-const kariDatas: [memoriesCol] = [
-  {
-    _id: "",
-    author: "hide",
-    title: "frame",
-    lyric: JSON.stringify(`Dear my sun. Should I know how low & low?
-  Dear my moon. Should I know how low & low?
-  Dear my stars　星の嘆き聞けば
-  Like a wind　ほんの小さな事だろう
-  悲しみは腕広げて
-  君の肩を抱くだろう
-  優しげな振る舞いで　君にからまる
-  It's a flame of sadness
-  Dear my mind　どんな不幸にでも
-  Say hello　言える気持ちほしい
-  Dear my hurts　いつも抱えていた
-  Like a wind　重い物捨てよう
-  夜の風　浴びていれば
-  忘れられる事なら
-  その歩幅広げてみる
-  前よりもずっと
-  笑う月の蒼い光
-  傷をそっと　閉じていくよ
-  It's a flame of sadness　降りそそぐ悲しみすら　抱きよせ
-  Life is going on　枯れるまで　歩いて行くだけ
-  It's a flame of sadness
-  Dear my sun. Should I know how low & low?
-  Dear my moon. Should I know how low & low?
-  Dear my stars.　星の嘆き聞けば
-  Like a wind.　ほんの小さな事だろう
-  降る星を数え終えたら　泣くのやめて歩いて行こう
-  Flame of misery　愛しさを憎しみを受け止めて
-  It's a flame of sadness　腕の中で砕いてしまえ　全て
-  Pieces of sadness　降りそそぐ雨がやんだら行こう
-  Life is going on　枯れるまで歩いて行くだけ
-  Stay free my misery
-  ‥‥my misery`),
-    remarks: "",
-    update: "2023-04-27T07:11:02.346Z",
-  },
-];
 export async function getSortedPostsData() {
   const allPostsData = (await getMemories({})) as [memoriesCol];
-  // const allPostsData = kariDatas;
-  // Sort posts by date
-  return allPostsData.sort(
-    //   (a, b) => {
-    //   if (a.update < b.update) {
-    //     return 1;
-    //   } else {
-    //     return -1;
-    //   }
-    // }
-    (a, b) => {
-      // 地域で並び替え
-      if (a.author !== b.author) {
-        if (a.author < b.author) return -1;
-        if (a.author > b.author) return 1;
-      }
-      // 男性の人口で並び替え
-      if (a.title !== b.title) {
-        if (a.title < b.title) return -1;
-        if (a.title > b.title) return 1;
-      }
-      return 0;
+  return allPostsData.sort((a, b) => {
+    // 作者で並び替え
+    if (a.author !== b.author) {
+      if (a.author < b.author) return -1;
+      if (a.author > b.author) return 1;
     }
-  );
+    // 曲名で並び替え
+    if (a.title !== b.title) {
+      if (a.title < b.title) return -1;
+      if (a.title > b.title) return 1;
+    }
+    return 0;
+  });
 }
-const url = DB_INFO.URL;
 const reqApi = async (params: any, query = "") => {
   return await fetch(`${url}${query}`, params)
     .then((res) => res.json())
@@ -81,8 +27,8 @@ const reqApi = async (params: any, query = "") => {
 };
 async function getMemories(cond: any) {
   let findData = {
-    host: DB_INFO.HOST,
-    dbName: DB_INFO.DB_NAME,
+    host: DB_HOST,
+    dbName: DB_NAME,
     coll: "memories",
     method: "find",
     cond,
@@ -97,21 +43,6 @@ async function getMemories(cond: any) {
 }
 export async function getAllPostIds() {
   let recs: [memoriesCol] = await getMemories({});
-  // var saveDatas = { ...kariDatas[0] };
-  // delete saveDatas._id;
-  // let postData = {
-  //   host: DB_INFO.HOST,
-  //   dbName: DB_INFO.DB_NAME,
-  //   coll: "memories",
-  //   method: "insertMany",
-  //   opt: { doc: [saveDatas] },
-  // };
-  // let data = await reqApi({
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify(postData),
-  // });
-  // console.log("data:", recs);
   return recs.map((rec) => {
     return {
       params: {
