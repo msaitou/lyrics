@@ -47,13 +47,28 @@ export async function getSortedPostsData() {
   const allPostsData = (await getMemories({})) as [memoriesCol];
   // const allPostsData = kariDatas;
   // Sort posts by date
-  return allPostsData.sort((a, b) => {
-    if (a.update < b.update) {
-      return 1;
-    } else {
-      return -1;
+  return allPostsData.sort(
+    //   (a, b) => {
+    //   if (a.update < b.update) {
+    //     return 1;
+    //   } else {
+    //     return -1;
+    //   }
+    // }
+    (a, b) => {
+      // 地域で並び替え
+      if (a.author !== b.author) {
+        if (a.author < b.author) return -1;
+        if (a.author > b.author) return 1;
+      }
+      // 男性の人口で並び替え
+      if (a.title !== b.title) {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
+      }
+      return 0;
     }
-  });
+  );
 }
 const url = DB_INFO.URL;
 const reqApi = async (params: any, query = "") => {
@@ -107,18 +122,19 @@ export async function getAllPostIds() {
 }
 export async function getPostData(id: string) {
   // Use gray-matter to parse the post metadata section
-  let para = id.split("-");
-  console.log('aaaaaaaaaaaaa',para);
-  let recs: [memoriesCol] = await getMemories({ title: para[1], author: para[0] });
-  // Use remark to convert markdown into HTML string
-  // const processedContent = await remark().use(html).process(matterResult.content);
-  const processedContent = recs[0].lyric;
-  var contentHtml = JSON.parse(processedContent) as string;
-  contentHtml = contentHtml.replaceAll("\n", "<br>");
-  // Combine the data with the id and contentHtml
-  return {
-    id,
-    contentHtml,
-    ...recs[0],
-  };
+  if (id) {
+    let para = id.split("-");
+    console.log("aaaaaaaaaaaaa", para);
+    let recs: [memoriesCol] = await getMemories({ title: para[1], author: para[0] });
+    const processedContent = recs[0].lyric;
+    var contentHtml = JSON.parse(processedContent) as string;
+    contentHtml = contentHtml.replaceAll("\n", "<br>");
+    // Combine the data with the id and contentHtml
+    recs[0].lyric = contentHtml;
+    return {
+      id,
+      contentHtml,
+      ...recs[0],
+    };
+  } else return null;
 }

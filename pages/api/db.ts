@@ -14,10 +14,24 @@ const reqApi = (params: any, query = "") => {
     });
 };
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  console.log("req", req.body);
+  console.log("req", req.body, req.query);
   let post = req.body;
+  let kind = req.query.kind;
+  let result: string = "";
+  switch (kind) {
+    case "save":
+      result = await save(post);
+      break;
+    case "remove":
+      result = await remove(post);
+      break;
+  }
+  res.status(200).json({ name: result });
+}
+async function save(post: any) {
   let cond = {};
   if (post._id) cond = { _id: post._id };
+  delete post._id;  // ObjectId型でないので、update時に変更されたとみなされるのでどのみち削除
   let saveData = {
     ...comApiData,
     coll: "memories",
@@ -25,10 +39,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     opt: { doc: { ...post, lyric: JSON.stringify(post.lyric), update: new Date() } },
     cond,
   };
-  let data2 = await reqApi({
+  let result = await reqApi({
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(saveData),
   });
-  res.status(200).json({ name: data2 });
+  return result;
+}
+async function remove(post: any) {
+  let cond = {};
+  let result: string = "";
+  if (post._id) {
+    cond = { _id: post._id };
+    let saveData = {
+      ...comApiData,
+      coll: "memories",
+      method: "delete",
+      cond,
+    };
+    result = await reqApi({
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(saveData),
+    });
+  }
+  return result;
 }
