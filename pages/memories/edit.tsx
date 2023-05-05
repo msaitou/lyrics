@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (params) => {
   // クエリパラメータの取得
   var editData: any = {};
   if (params?.query) {
-    console.log("keyword =", params.query.id);
+    // console.log("keyword =", params.query.id);
     editData = await getPostData(params.query.id as string);
   }
   return {
@@ -153,7 +153,7 @@ export default function Edit({ editData }: { editData?: memoriesCol }) {
       </Head>
       <article>
         <h1 className={utilStyles.headingXl}>{editData?.title ? `editting (${editData?.title})` : "adding"}</h1>
-        <p className="lg:w-2/3 mx-auto leading-relaxed">
+        <p className="mx-auto leading-relaxed">
           <Link className="text-green-400" href="edit">
             Add→
           </Link>

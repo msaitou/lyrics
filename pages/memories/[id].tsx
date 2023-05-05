@@ -71,7 +71,7 @@ function Form({
             {postData ? <Link href={`edit?id=${postData.author}-${postData.title}`}>Edit →</Link> : ""}
           </p>
           <p className="lg:w-2/3 mx-auto leading-relaxed text-pink-300">
-            <Link href={`chord-list`} className="">
+            <Link href={`chord-list`} target="_blank">
               chord-list →
             </Link>
           </p>
