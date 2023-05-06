@@ -53,7 +53,7 @@ export async function getAllPostIds() {
 }
 export async function getPostData(id: string) {
   // Use gray-matter to parse the post metadata section
-  if (id) {
+  if (id && id != "<no source>") {
     let para = id.split("-");
     console.log("aaaaaaaaaaaaa", para);
     let recs: [memoriesCol] = await getMemories({ title: para[1], author: para[0] });

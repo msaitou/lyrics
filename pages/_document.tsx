@@ -8,7 +8,6 @@ export default function Document() {
         <link rel="apple-touch-icon" href="/lyrics192.png"></link>
         <link rel="icon" href="/favicon.ico" />
         <meta name="google" content="notranslate" />
-        <title>I Can Sings</title>
       </Head>
       <body>
         <Main />

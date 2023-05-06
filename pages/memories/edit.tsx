@@ -19,8 +19,8 @@ type FormData = {
 export const getServerSideProps: GetServerSideProps = async (params) => {
   // クエリパラメータの取得
   var editData: any = {};
-  if (params?.query) {
-    // console.log("keyword =", params.query.id);
+  if (params?.query && params?.query?.id) {
+    // console.log("keyword =", params.query);
     editData = await getPostData(params.query.id as string);
     delete editData.contentHtml;
   }

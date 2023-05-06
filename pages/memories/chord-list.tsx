@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Image from "next/image";
 
 export default function chordList({}) {
@@ -36,43 +37,48 @@ export default function chordList({}) {
     return `chord/${name}-ss.jpg`;
   };
   return (
-    <div>
-      <table>
-        {baseList.map((c) => {
-          return [0, 1].map((i) => {
-            return !i ? (
-              <thead key={c + i}>
-                <tr>
-                  {codeVarList.map((v) => {
-                    return <th key={c + v}>{`${c}${v}`}</th>;
-                  })}
-                </tr>
-              </thead>
-            ) : (
-              <tbody key={c + i}>
-                <tr>
-                  {codeVarList.map((v) => {
-                    return (
-                      <td key={c + v}>
-                        {
-                          <Image
-                            priority
-                            src={`/${convImageName(c, v)}`}
-                            className="max-w-none"
-                            alt=""
-                            height={100}
-                            width={100}
-                          />
-                        }
-                      </td>
-                    );
-                  })}
-                </tr>
-              </tbody>
-            );
-          });
-        })}
-      </table>
-    </div>
+    <>
+      <Head>
+        <title>chordList</title>
+      </Head>
+      <div>
+        <table>
+          {baseList.map((c) => {
+            return [0, 1].map((i) => {
+              return !i ? (
+                <thead key={c + i}>
+                  <tr>
+                    {codeVarList.map((v) => {
+                      return <th key={c + v}>{`${c}${v}`}</th>;
+                    })}
+                  </tr>
+                </thead>
+              ) : (
+                <tbody key={c + i}>
+                  <tr>
+                    {codeVarList.map((v) => {
+                      return (
+                        <td key={c + v}>
+                          {
+                            <Image
+                              priority
+                              src={`/${convImageName(c, v)}`}
+                              className="max-w-none"
+                              alt=""
+                              height={100}
+                              width={100}
+                            />
+                          }
+                        </td>
+                      );
+                    })}
+                  </tr>
+                </tbody>
+              );
+            });
+          })}
+        </table>
+      </div>
+    </>
   );
 }

@@ -4,15 +4,21 @@ import { GetStaticProps, GetServerSideProps } from "next";
 import { getSortedPostsData, memoriesCol } from "../lib/memories";
 import Link from "next/link";
 import Layout from "@/components/layout";
+import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 // mongodbからデータを取得したい
 // onload
 // 再読込ボタン
 
-export const getServerSideProps: GetServerSideProps = async () => {
+// データの取得が遅くて、たまに取得できないまま返す事がある
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // const res = context.res;
+  // res.setHeader("Cache-Control", "no-store, max-age=0");
+
   // これ使うと追加したデータが反映されない。ビルド時に静的ページとして作成しまうため
   // export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = await getSortedPostsData();
+  console.log("server:", allPostsData.length);
   return {
     props: {
       allPostsData,
@@ -20,10 +26,15 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export default function Home({ allPostsData }: { allPostsData: memoriesCol[] }) {
-  console.log(allPostsData);
+export default function Home({ allPostsData = [] }: { allPostsData: memoriesCol[] }) {
+  // export default async function Home({}) {
+  // const allPostsData = await getSortedPostsData();
+  console.log(allPostsData.length);
   return (
     <Layout home>
+      <Head>
+        <title>I Can Sings</title>
+      </Head>
       <main className={`flex min-h-screen flex-col items-center justify-between py-4 ${inter.className}`}>
         {/* https://tailblocks.cc/ */}
         <section className="text-gray-300 body-font w-full">
