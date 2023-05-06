@@ -15,9 +15,11 @@ type FormData = {
   remarks: string;
   update: string;
 };
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params,res }) => {
+  // res.setHeader('Cache-Control', 'no-store, max-age=0')
   console.log("id:::", params?.id);
   const postData = await getPostData(params?.id as string);
+  // console.log('sareteru',postData);
   const allData = await getSortedPostsData();
   let allPostsData: any = [];
   let baseFlag = false;

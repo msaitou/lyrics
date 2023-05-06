@@ -22,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (params) => {
   if (params?.query) {
     // console.log("keyword =", params.query.id);
     editData = await getPostData(params.query.id as string);
+    delete editData.contentHtml;
   }
   return {
     props: {

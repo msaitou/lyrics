@@ -58,13 +58,12 @@ export async function getPostData(id: string) {
     console.log("aaaaaaaaaaaaa", para);
     let recs: [memoriesCol] = await getMemories({ title: para[1], author: para[0] });
     const processedContent = recs[0].lyric;
-    var contentHtml = JSON.parse(processedContent) as string;
-    contentHtml = contentHtml.replaceAll("\n", "<br>");
-    // Combine the data with the id and contentHtml
-    recs[0].lyric = contentHtml;
+    recs[0].lyric = JSON.parse(processedContent) as string;
+    var contentHtml = recs[0].lyric.replaceAll("\n", "<br>");
     return {
       id,
       contentHtml,
+      // contentHtml:recs[0].lyric,
       ...recs[0],
     };
   } else return null;
