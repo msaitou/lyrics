@@ -6,5 +6,5 @@ const wP = withPWA({
   dest: "public",
   skipWaiting: true,
 });
-const nextConfig = wP({ reactStrinctMode: true });
+const nextConfig = wP({ reactStrinctMode: true, swcMinify: false });
 export default nextConfig;
