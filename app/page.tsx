@@ -1,40 +1,18 @@
-import Image from "next/image";
+// @/app/page.tsx
 import { Inter } from "next/font/google";
-import { GetStaticProps, GetServerSideProps } from "next";
-import { getSortedPostsData, memoriesCol } from "../lib/memories";
+import { getSortedPostsData } from "@/lib/memories";
+import Image from "next/image";
 import Link from "next/link";
 import Layout from "@/components/layout";
-import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
-// mongodbからデータを取得したい
-// onload
-// 再読込ボタン
 
-// データの取得が遅くて、たまに取得できないまま返す事がある
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // const res = context.res;
-  // res.setHeader("Cache-Control", "no-store, max-age=0");
-
-  // これ使うと追加したデータが反映されない。ビルド時に静的ページとして作成しまうため
-  // export const getStaticProps: GetStaticProps = async () => {
+export default async function Page() {
+  // console.log("aaaaaaaa", a);
   const allPostsData = await getSortedPostsData();
   console.log("server:", allPostsData.length);
-  return {
-    props: {
-      allPostsData,
-    },
-  };
-};
-
-export default function Home({ allPostsData = [] }: { allPostsData: memoriesCol[] }) {
-  // export default async function Home({}) {
-  // const allPostsData = await getSortedPostsData();
   console.log(allPostsData.length);
   return (
     <Layout home>
-      <Head>
-        <title>I Can Sings</title>
-      </Head>
       <main className={`flex min-h-screen flex-col items-center justify-between py-4 ${inter.className}`}>
         {/* https://tailblocks.cc/ */}
         <section className="text-gray-300 body-font w-full">
@@ -49,7 +27,7 @@ export default function Home({ allPostsData = [] }: { allPostsData: memoriesCol[
             </div>
             {/* ここループ */}
             <div className="flex flex-wrap -m-2">
-              {allPostsData.map((rec) => (
+              {allPostsData.map(rec => (
                 <div className="p-2 w-full lg:w-1/4 md:w-1/3 sm:w-1/2" key={`${rec.author}-${rec.title}`}>
                   <Link href={`memories/${rec.author}-${rec.title}`}>
                     <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">

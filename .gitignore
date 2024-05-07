@@ -42,3 +42,7 @@ memo.txt
 **/public/sw.js.map
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
+
+# prisma migrate
+/prisma/*.db
+/prisma/migrations/*

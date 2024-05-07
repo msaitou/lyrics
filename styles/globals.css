@@ -25,3 +25,29 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  height: 1.5rem;
+  opacity: 0.5;
+  width: 100%;
+}
+main {
+  /*padding-top: 1.5rem;
+  padding-bottom: 0.8rem;*/
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  height: 2rem;
+  opacity: 0.5;
+  width: 100%;
+}
+button.footer {
+  position: fixed;
+  bottom: 0;
+  right: 1rem;
+  height: 3rem;
+  align-content: end;
+}
