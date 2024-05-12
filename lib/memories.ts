@@ -3,7 +3,7 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { PrismaClient, Memory } from "@prisma/client";
 import { getMemories, memoriesCol } from "@/app/api/db/route";
-export const { DB_TYPE} = process.env;
+export const { DB_TYPE } = process.env;
 
 const prisma = new PrismaClient();
 
@@ -37,7 +37,7 @@ export async function getSortedPostsData() {
 export async function getAllPostIds() {
   noStore();
   let recs: memoriesCol[] = await getMemories({});
-  return recs.map(rec => {
+  return recs.map((rec) => {
     return {
       params: {
         author_title: `${rec.author}-${rec.title}`,
@@ -59,8 +59,7 @@ export async function getPostData(author_title: string) {
       url.searchParams.append("author", para[0]);
       recs = await (await fetch(url)).json();
       // console.log(recs.json(), 9999);
-    }
-    else {
+    } else {
       // let recs: memoriesCol[] = await getMemories({
       recs = await getMemories({
         title: para[1],

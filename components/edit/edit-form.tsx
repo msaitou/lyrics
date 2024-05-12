@@ -45,7 +45,7 @@ export default function Form({ editData }: { editData?: memoriesCol }) {
       console.log('Operation completed');
     });
   }
-
+console.log(22,data);
   if (data)
   return (
     // <form action={handleSubmit(onSave)}>

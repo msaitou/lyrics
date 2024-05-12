@@ -2,12 +2,13 @@
 // @/app/memories/edit/[id]/page.tsx
 import { EditLayout } from "@/components/edit/edit-layout";
 import { getPostData } from "@/lib/memories";
-const DB_TYPE = process.env.NEXT_PUBLIC_DB_TYPE;
 
-export default function Edit({ params, data }: { params: { id: string }; data: any }) {
+export default async function Edit({ params, data }: { params: { id: string }; data: any }) {
   const decodedId = params.id ? decodeURIComponent(params.id) : undefined;
   console.log("decodedId", decodedId);
-  return <EditLayout id={decodedId} data={data}></EditLayout>;
+  const [postData] = await Promise.all([getPostData(decodedId as string)]);
+
+  return <EditLayout id={decodedId} data={postData}></EditLayout>;
 }
 // export default async function Edit({ params, data }: { params: { id: string } ,data: any}) {
 //   const decodedId = params.id ? decodeURIComponent(params.id) : undefined;

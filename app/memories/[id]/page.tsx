@@ -1,7 +1,6 @@
 // @/app/memories/[id]/page.tsx
 import { getPostData, getSortedPostsData } from "@/lib/memories";
 import { DetailLayout } from "@/components/edit/detail-layout";
-const DB_TYPE = process.env.NEXT_PUBLIC_DB_TYPE;
 
 export default async function Post({ params }: { params: { id: string } }) {
   console.log("para", params);
